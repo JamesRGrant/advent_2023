@@ -7,7 +7,7 @@ impl Solve for Problem {
     fn p1(&mut self) -> i64 {
         let mut sum = 0;
         for line in &self.data {
-            let mut digit = "".to_string();
+            let mut digit = String::new();
             for c in line.chars() {
                 if c.is_ascii_digit() {
                     digit.push(c);
@@ -35,7 +35,7 @@ impl Solve for Problem {
         let mut sum = 0;
 
         for line in &self.data {
-            let mut digit = "".to_string();
+            let mut digit = String::new();
 
             // Get the first number
             'outer: for (i, c) in line.chars().enumerate() {
