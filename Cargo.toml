@@ -1,0 +1,19 @@
+[package]
+name = "advent_2023"
+version = "0.1.0"
+description = "Rust implementation of coding challenges."
+repository = "https://github.com/JamesRGrant/advent_2023"
+readme = "README.md"
+license = "MIT"
+keywords = ["Advent of Code"]
+categories = ["rust-patterns"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#petgraph = "0.6.2"
+
+# This is for profiling, remove if not using
+[profile.release]
+#debug = true
