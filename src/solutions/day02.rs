@@ -1,3 +1,5 @@
+use core::panic;
+
 use crate::Solve;
 pub struct Problem {
     red: Vec<i64>,
@@ -41,19 +43,18 @@ impl Problem {
             let mut r = 0;
             let mut g = 0;
             let mut b = 0;
-            let s1 = line.split(':').collect::<Vec<&str>>();
-            let rounds = s1[1].split(';').collect::<Vec<&str>>();
-            for round in rounds {
-                let dice = round.split(',').collect::<Vec<&str>>();
-                for die in dice {
-                    let count = die.trim().split(' ').collect::<Vec<&str>>();
-                    let v = count[0].parse::<i64>().unwrap();
-                    match count[1] {
-                        "red" => r = i64::max(r, v),
-                        "green" => g = i64::max(g, v),
-                        "blue" => b = i64::max(b, v),
-                        _ => (),
-                    }
+            let mut tokens = line.split(' ');
+            // Throw away "Game 1:"
+            tokens.next();
+            tokens.next();
+            while let Some(num) = tokens.next() {
+                let count = num.parse::<i64>().unwrap();
+                // Match "red" "red,", "red;", etc.
+                match &tokens.next().unwrap()[0..3] {
+                    "red" => r = i64::max(r, count),
+                    "gre" => g = i64::max(g, count),
+                    "blu" => b = i64::max(b, count),
+                    _ => panic!("Unexpected color"),
                 }
             }
             red.push(r);

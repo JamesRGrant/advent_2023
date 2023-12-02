@@ -53,7 +53,7 @@ fn run_problem(day: i32, filename: &str) {
         // _ => Box::new(solutions::day25::Problem::new(&data)),
         _ => panic!("Day {day} not implemented"),
     };
-    println!("{day:0>2}:                 in {:>10?}", now.elapsed());
+    println!("{day:0>2}: load/parse      in {:>10?}", now.elapsed());
 
     // Solve each part for the day
     now = std::time::Instant::now();
