@@ -35,7 +35,7 @@ These times are from:
 en 9 6900 HX 3.3 GHz
 * 32 GB Ram
 * Windows 11 Pro (an the associate bloat running in the background)
-``````
+```
 01: load/parse      in    183.2µs
  1:           53194 in     73.9µs
  2:           54249 in    165.7µs
@@ -43,4 +43,4 @@ en 9 6900 HX 3.3 GHz
  1:            2449 in      600ns
  2:           63981 in      200ns
 Total elapsed time:      1.0504ms
-``````
+```
