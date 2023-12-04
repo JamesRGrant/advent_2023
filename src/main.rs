@@ -28,7 +28,7 @@ fn run_problem(day: i32, filename: &str) {
     let mut s: Box<dyn Solve> = match day {
         1 => Box::new(solutions::day01::Problem::new(data)),
         2 => Box::new(solutions::day02::Problem::new(data)),
-        3 => Box::new(solutions::day03::Problem::new(data)),
+        3 => Box::new(solutions::day03::Problem::new(&data)),
         // 4 => Box::new(solutions::day04::Problem::new(&data)),
         // 5 => Box::new(solutions::day05::Problem::new(&data)),
         // 6 => Box::new(solutions::day06::Problem::new(&data)),
