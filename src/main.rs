@@ -13,7 +13,7 @@ trait Solve {
 
 fn main() {
     let start = std::time::Instant::now();
-    for day in 1..=3 {
+    for day in 1..=4 {
         // Production data is: input\01.txt
         run_problem(day, &format!("input\\{:0>2}.txt", day.to_string()));
     }
