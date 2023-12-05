@@ -65,15 +65,15 @@ impl Problem {
         false
     }
 
-    pub fn new(input: &Vec<String>) -> Self {
-        let len = input[0].len();
+    pub fn new(data: &[String]) -> Self {
+        let len = data[0].len();
         let mut nums: HashMap<usize, Vec<(i64, usize, usize)>> = HashMap::new();
         let mut symbols: HashMap<usize, Vec<usize>> = HashMap::new();
         let mut gears: Vec<(usize, usize)> = Vec::new();
         let mut row = 1;
 
         // We're going to always shift the coordinates by 1 so we don't get out of bounds on zero
-        for line in input {
+        for line in data {
             let mut num = String::new();
             let mut line_nums = Vec::new();
             let mut line_symbols = Vec::new();

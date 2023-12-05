@@ -79,9 +79,9 @@ impl Solve for Problem {
     }
 }
 impl Problem {
-    pub fn new(data: Vec<String>) -> Self {
+    pub fn new(data: &[String]) -> Self {
         Problem {
-            data,
+            data: data.to_vec(),
         }
     }
 }
@@ -100,10 +100,10 @@ mod test {
             "a1b2c3d4e5f".to_string(),
             "treb7uchet".to_string(),
         ];
-        let mut s = Problem::new(p1_test);
+        let mut s = Problem::new(&p1_test);
         assert_eq!(s.p1(), 142);
 
-        let mut s = Problem::new(crate::load_file("input\\01_test.txt"));
+        let mut s = Problem::new(&crate::load_file("input\\01_test.txt"));
         assert_eq!(s.p2(), 281);
 
         println!("Total elapsed time:    {:>10?}", start.elapsed());

@@ -10,6 +10,7 @@ pub struct Problem {
 impl Solve for Problem {
     #![warn(clippy::cast_possible_wrap)]
     /// Find the games that can be played with the given dice (sum the indices of the games)
+    #[allow(clippy::cast_possible_wrap)]
     fn p1(&mut self) -> i64 {
         let max_red = 12;
         let max_green = 13;
@@ -35,11 +36,11 @@ impl Solve for Problem {
     }
 }
 impl Problem {
-    pub fn new(input: Vec<String>) -> Self {
+    pub fn new(data: &[String]) -> Self {
         let mut blue = Vec::new();
         let mut red = Vec::new();
         let mut green = Vec::new();
-        for line in input {
+        for line in data {
             let mut r = 0;
             let mut g = 0;
             let mut b = 0;
@@ -77,7 +78,7 @@ mod test {
     #[test]
     fn run_tests() {
         let start = std::time::Instant::now();
-        let mut s = Problem::new(crate::load_file("input\\02_test.txt"));
+        let mut s = Problem::new(&crate::load_file("input\\02_test.txt"));
 
         assert_eq!(s.p1(), 8);
         assert_eq!(s.p2(), 2286);

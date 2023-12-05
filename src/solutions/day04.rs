@@ -31,7 +31,7 @@ mod test {
     #[test]
     fn run_tests() {
         let start = std::time::Instant::now();
-        let buf = BufReader::new(File::open("input\\_test.txt").expect("File not found."));
+        let buf = BufReader::new(File::open("input\\04_test.txt").expect("File not found."));
         let data: Vec<String> = buf.lines().map(|l| l.expect("Parse line error.")).collect();
         let mut s = Problem::new(&data);
 
