@@ -36,14 +36,20 @@ en 9 6900 HX 3.3 GHz
 * 32 GB Ram
 * Windows 11 Pro (an the associate bloat running in the background)
 ```
-01: load/parse      in    175.6µs
- 1:           53194 in     64.6µs
- 2:           54249 in    155.4µs
-02: load/parse      in    105.6µs
- 1:            2449 in      400ns
- 2:           63981 in      200ns
-03: load/parse      in    427.5µs
- 1:          560570 in     43.6µs
- 2:        91601924 in     37.6µs
-Total elapsed time:      1.4173ms
+01: load/parse      in    266.2µs
+ 1:           53194 in     62.3µs
+ 2:           54249 in    166.3µs
+02: load/parse      in    126.5µs
+ 1:            2449 in      900ns
+ 2:           63981 in      300ns
+03: load/parse      in    523.7µs
+ 1:          560570 in     65.3µs
+ 2:        91601924 in     38.6µs
+04: load/parse      in    411.1µs
+ 1:           25231 in      1.4µs
+ 2:         9721255 in     21.9µs
+05: load/parse      in    120.3µs
+ 1:       379811651 in      2.2µs
+ 2:        27992443 in     23.6µs
+Total elapsed time:      3.2121ms
 ```

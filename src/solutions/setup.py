@@ -6,7 +6,7 @@ content = f_template.read()
 f_template.close()
 
 f = open(f"mod.rs", "a")
-for i in range(4, 5):
+for i in range(5, 6):
     # Add mod dayXX; to to mod.rs
     f.write("pub mod day" + f"{i:02}" + ";\n")
 
