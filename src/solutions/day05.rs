@@ -91,7 +91,7 @@ impl Solve for Problem {
             }
 
             // Find the min of the new ranges
-            for (start, end) in &input_ranges {
+            for (start, _end) in &input_ranges {
                 min = i64::min(min, *start);
             }
         }

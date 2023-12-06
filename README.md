@@ -14,7 +14,7 @@ They are the same algorithms, but you can see a difference in syntax, language f
 ## How to run
 Download the repository and run with:
 
-`cargo run --release`.
+`cargo run --release`
 
 Run the test cases (they use test input files) with 
 
@@ -31,25 +31,27 @@ I prefer the fewest lines as possible without over obfuscating the logic.  There
 ## Performance Results
 These times are from:
 * ASUS Zephyrus Duo
-* AMD Ryz
-en 9 6900 HX 3.3 GHz
+* AMD Ryzen 9 6900 HX 3.3 GHz
 * 32 GB Ram
 * Windows 11 Pro (an the associate bloat running in the background)
 ```
-01: load/parse      in    266.2µs
- 1:           53194 in     62.3µs
- 2:           54249 in    166.3µs
-02: load/parse      in    126.5µs
- 1:            2449 in      900ns
- 2:           63981 in      300ns
-03: load/parse      in    523.7µs
- 1:          560570 in     65.3µs
- 2:        91601924 in     38.6µs
-04: load/parse      in    411.1µs
+01: load/parse      in    269.3µs
+ 1:           53194 in     64.6µs
+ 2:           54249 in    177.7µs
+02: load/parse      in    138.2µs
+ 1:            2449 in      800ns
+ 2:           63981 in      200ns
+03: load/parse      in    601.7µs
+ 1:          560570 in     52.5µs
+ 2:        91601924 in     44.7µs
+04: load/parse      in    389.6µs
  1:           25231 in      1.4µs
- 2:         9721255 in     21.9µs
-05: load/parse      in    120.3µs
- 1:       379811651 in      2.2µs
- 2:        27992443 in     23.6µs
-Total elapsed time:      3.2121ms
+ 2:         9721255 in     19.2µs
+05: load/parse      in    126.5µs
+ 1:       379811651 in      2.4µs
+ 2:        27992443 in     25.3µs
+06: load/parse      in     69.3µs
+ 1:          170000 in      5.7µs
+ 2:        20537782 in      300ns
+Total elapsed time:      3.7996ms
 ```
