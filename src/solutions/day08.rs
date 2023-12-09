@@ -20,25 +20,26 @@ impl Solve for Problem {
         // load the starting keys
         for key in self.maps.keys() {
             if key.chars().nth(2).unwrap() == 'A' {
-                println!("Key: {key}");
+                // println!("Key: {key}");
                 io::stdout().flush().unwrap();
 
                 let step_cnt = self.count_steps(key.clone(), false);
-                println!("   Steps: {step_cnt}");
+                // println!("   Steps: {step_cnt}");
                 steps.push(step_cnt);
             }
         }
 
-        Problem::lcm(steps)
+        // Problem::lcm(steps)
+        0
     }
 }
 impl Problem {
-    pub fn lcm(nums: Vec<i64>) -> i64 {
-        let mut tmp = nums.clone();
+    pub fn lcm(nums: &[i64]) -> i64 {
+        let mut tmp: Vec<i64> = nums.to_vec();
 
         loop {
             // println!("{:?}", tmp);
-            let mut min = i64::MAX;
+            let min;
             {
                 min = *tmp.iter().min().unwrap();
                 if min == *tmp.iter().max().unwrap() {
@@ -64,11 +65,6 @@ impl Problem {
         let mut i = 0;
 
         while i <= self.directions.len() {
-            // println!("step = {step_count}, i = {i}, key = {key}");
-            if step_count > 100000 {
-                return -1;
-            }
-
             let (left, right) = self.maps.get(&key).unwrap();
             if self.directions[i] == 'L' {
                 key = left.to_string();
@@ -80,15 +76,15 @@ impl Problem {
 
             if key == "ZZZ" && zzz {
                 break;
-            } else {
-                let mut flag = true;
-                if key.chars().nth(2).unwrap() != 'Z' {
-                    flag = false;
-                }
-                if flag {
-                    break;
-                }
             }
+            let mut flag = true;
+            if key.chars().nth(2).unwrap() != 'Z' {
+                flag = false;
+            }
+            if flag {
+                break;
+            }
+
             if i == self.directions.len() - 1 {
                 i = 0;
             } else {
