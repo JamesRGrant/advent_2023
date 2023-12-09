@@ -1,77 +1,77 @@
 use crate::Solve;
+use petgraph::graph::NodeIndex;
+use petgraph::{Graph, Outgoing};
 use std::collections::HashMap;
-use std::io::{self, Write};
 
 pub struct Problem {
     directions: Vec<char>,
-    maps: HashMap<String, (String, String)>,
+    graph: Graph<String, char>,
+    nodes: HashMap<String, NodeIndex>,
 }
 impl Solve for Problem {
     /// Short Description
     fn p1(&mut self) -> i64 {
-        self.count_steps("AAA".to_string(), true)
+        let x = self.nodes.get("AAA").unwrap();
+        self.graph_count_steps(*x, true)
     }
 
     /// Short Description
     fn p2(&mut self) -> i64 {
-        // let  keys: Vec<String> = Vec::new();
-        let mut steps: Vec<i64> = Vec::new();
+        let mut retval = 1;
 
-        // load the starting keys
-        for key in self.maps.keys() {
+        // for (key, node) in &self.nodes {
+
+        for node in self.graph.node_indices() {
+            let key = self.graph.node_weight(node).unwrap();
             if key.chars().nth(2).unwrap() == 'A' {
-                io::stdout().flush().unwrap();
-
-                let step_cnt = self.count_steps(key.clone(), false);
-                steps.push(step_cnt);
+                let step_cnt = self.graph_count_steps(node, false);
+                retval = Problem::lcm(retval, step_cnt);
             }
         }
 
-        Problem::lcm(&steps)
+        retval
     }
 }
 impl Problem {
-    pub fn lcm(nums: &[i64]) -> i64 {
-        let mut retval = 1;
-
-        for num in nums {
-            retval = retval * *num / Problem::gcd(retval, *num);
-        }
-        retval
+    // From: https://www.hackertouch.com/least-common-multiple-in-rust.html
+    pub fn lcm(a: i64, b: i64) -> i64 {
+        a * b / Problem::gcd(a, b)
     }
 
     // From: https://www.hackertouch.com/least-common-multiple-in-rust.html
-    fn gcd(first: i64, second: i64) -> i64 {
-        let mut max = first;
-        let mut min = second;
-        std::mem::swap(&mut min, &mut max);
-
+    fn gcd(a: i64, b: i64) -> i64 {
+        let mut max = a;
+        let mut min = b;
+        if b > a {
+            std::mem::swap(&mut min, &mut max);
+        }
         loop {
             let res = max % min;
             if res == 0 {
                 return min;
             }
-
             max = min;
             min = res;
         }
     }
 
-    pub fn count_steps(&self, start: String, zzz: bool) -> i64 {
-        let mut key = start;
+    pub fn graph_count_steps(&self, start: NodeIndex, zzz: bool) -> i64 {
+        let mut walker = start;
         let mut step_count = 0;
         let mut i = 0;
 
         while i <= self.directions.len() {
-            let (left, right) = self.maps.get(&key).unwrap();
-            if self.directions[i] == 'L' {
-                key = left.to_string();
-            } else {
-                key = right.to_string();
+            let mut edges = self.graph.neighbors_directed(walker, Outgoing).detach();
+            while let Some(edge) = edges.next_edge(&self.graph) {
+                let w = self.graph.edge_weight(edge).unwrap();
+                if *w == self.directions[i] {
+                    walker = self.graph.edge_endpoints(edge).unwrap().1;
+                    break;
+                }
             }
-
             step_count += 1;
 
+            let key = self.graph.node_weight(walker).unwrap();
             if key == "ZZZ" && zzz {
                 break;
             }
@@ -94,7 +94,9 @@ impl Problem {
 
     pub fn new(data: &[String]) -> Self {
         let directions: Vec<char> = data[0].chars().collect();
-        let mut maps: HashMap<String, (String, String)> = HashMap::new();
+        let mut maps: Vec<(String, String, String)> = Vec::new();
+        let mut graph = Graph::<String, char>::new();
+        let mut nodes: HashMap<String, NodeIndex> = HashMap::new();
 
         for line in data.iter().skip(2) {
             let tokens = line.split_whitespace().collect::<Vec<&str>>();
@@ -102,12 +104,20 @@ impl Problem {
             let left = tokens[2].to_string().replace(['(', ','], "");
             let right = tokens[3].to_string().replace(')', "");
 
-            maps.insert(source, (left, right));
+            maps.push((source.clone(), left.clone(), right.clone()));
+            nodes.insert(source.clone(), graph.add_node(source.clone()));
+        }
+
+        // Add the edges to the graph
+        for (key, left, right) in maps {
+            graph.add_edge(nodes[&key], nodes[&left], 'L');
+            graph.add_edge(nodes[&key], nodes[&right], 'R');
         }
 
         Problem {
             directions,
-            maps,
+            graph,
+            nodes,
         }
     }
 }

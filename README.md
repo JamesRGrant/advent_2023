@@ -35,23 +35,32 @@ These times are from:
 * 32 GB Ram
 * Windows 11 Pro (an the associate bloat running in the background)
 ```
-01: load/parse      in    269.3µs
- 1:           53194 in     64.6µs
- 2:           54249 in    177.7µs
-02: load/parse      in    138.2µs
- 1:            2449 in      800ns
- 2:           63981 in      200ns
-03: load/parse      in    601.7µs
- 1:          560570 in     52.5µs
- 2:        91601924 in     44.7µs
-04: load/parse      in    389.6µs
+01: load/parse      in    227.1µs
+ 1:           53194 in     61.3µs
+ 2:           54249 in    155.4µs
+02: load/parse      in    114.6µs
+ 1:            2449 in      600ns
+ 2:           63981 in      400ns
+03: load/parse      in    481.1µs
+ 1:          560570 in     73.4µs
+ 2:        91601924 in     40.8µs
+04: load/parse      in    346.9µs
  1:           25231 in      1.4µs
- 2:         9721255 in     19.2µs
-05: load/parse      in    126.5µs
- 1:       379811651 in      2.4µs
- 2:        27992443 in     25.3µs
-06: load/parse      in     69.3µs
- 1:          170000 in      5.7µs
+ 2:         9721255 in     22.8µs
+05: load/parse      in    107.8µs
+ 1:       379811651 in      2.2µs
+ 2:        27992443 in     22.6µs
+06: load/parse      in     60.2µs
+ 1:          170000 in        4µs
  2:        20537782 in      300ns
-Total elapsed time:      3.7996ms
+07: load/parse      in   1.1465ms
+ 1:       250453939 in      600ns
+ 2:       248652697 in      700ns
+08: load/parse      in    555.1µs
+ 1:           12169 in     61.9µs
+ 2:  12030780859469 in    476.9µs
+09: load/parse      in    274.4µs
+ 1:      1934898178 in    329.7µs
+ 2:            1129 in      200ns
+Total elapsed time:      6.8907ms
 ```

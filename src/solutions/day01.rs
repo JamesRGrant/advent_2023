@@ -45,9 +45,9 @@ impl Solve for Problem {
                     break;
                 }
                 // Is it a word?
-                for (cnt, n) in nums.iter().enumerate() {
+                for (n, a) in nums.iter().zip(ascii_nums.iter()) {
                     if line[i..].starts_with(n) {
-                        digit.push(ascii_nums[cnt]);
+                        digit.push(*a);
                         break 'outer;
                     }
                 }
@@ -63,9 +63,9 @@ impl Solve for Problem {
                 }
                 // Is it a word?
                 if i >= 2 {
-                    for (cnt, n) in nums.iter().enumerate() {
+                    for (n, a) in nums.iter().zip(ascii_nums.iter()) {
                         if line[(len - i - 1)..].starts_with(n) {
-                            digit.push(ascii_nums[cnt]);
+                            digit.push(*a);
                             break 'outer;
                         }
                     }
