@@ -20,43 +20,41 @@ impl Solve for Problem {
         // load the starting keys
         for key in self.maps.keys() {
             if key.chars().nth(2).unwrap() == 'A' {
-                // println!("Key: {key}");
                 io::stdout().flush().unwrap();
 
                 let step_cnt = self.count_steps(key.clone(), false);
-                // println!("   Steps: {step_cnt}");
                 steps.push(step_cnt);
             }
         }
 
-        // Problem::lcm(steps)
-        0
+        Problem::lcm(&steps)
     }
 }
 impl Problem {
     pub fn lcm(nums: &[i64]) -> i64 {
-        let mut tmp: Vec<i64> = nums.to_vec();
+        let mut retval = 1;
+
+        for num in nums {
+            retval = retval * *num / Problem::gcd(retval, *num);
+        }
+        retval
+    }
+
+    // From: https://www.hackertouch.com/least-common-multiple-in-rust.html
+    fn gcd(first: i64, second: i64) -> i64 {
+        let mut max = first;
+        let mut min = second;
+        std::mem::swap(&mut min, &mut max);
 
         loop {
-            // println!("{:?}", tmp);
-            let min;
-            {
-                min = *tmp.iter().min().unwrap();
-                if min == *tmp.iter().max().unwrap() {
-                    break;
-                }
+            let res = max % min;
+            if res == 0 {
+                return min;
             }
 
-            // increment the smallest
-            for (i, num) in tmp.iter_mut().enumerate() {
-                if *num == min {
-                    *num += nums[i];
-                    break;
-                }
-            }
+            max = min;
+            min = res;
         }
-
-        tmp[0]
     }
 
     pub fn count_steps(&self, start: String, zzz: bool) -> i64 {
