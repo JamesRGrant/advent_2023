@@ -89,23 +89,18 @@ impl Problem {
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::load_file;
+
     #[test]
-    fn run_tests() {
+    fn p1() {
         let start = std::time::Instant::now();
-
-        // This problem has two test inputs, so lets do ths manually
-        let p1_test: Vec<String> = vec![
-            "1abc2".to_string(),
-            "pqr3stu8vwx".to_string(),
-            "a1b2c3d4e5f".to_string(),
-            "treb7uchet".to_string(),
-        ];
-        let mut s = Problem::new(&p1_test);
-        assert_eq!(s.p1(), 142);
-
-        let mut s = Problem::new(&crate::load_file("input\\01_test.txt"));
-        assert_eq!(s.p2(), 281);
-
-        println!("Total elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input\\01_test.txt")).p1(), 142);
+        println!("P1 elapsed time:    {:>10?}", start.elapsed());
+    }
+    #[test]
+    fn p2() {
+        let start = std::time::Instant::now();
+        assert_eq!(Problem::new(&load_file("input\\01_test2.txt")).p2(), 281);
+        println!("P2 elapsed time:    {:>10?}", start.elapsed());
     }
 }

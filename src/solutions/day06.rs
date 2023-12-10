@@ -65,23 +65,21 @@ impl Problem {
         }
     }
 }
-
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::fs::File;
-    use std::io::{BufRead, BufReader};
+    use crate::load_file;
 
     #[test]
-    fn run_tests() {
+    fn p1() {
         let start = std::time::Instant::now();
-        let buf = BufReader::new(File::open("input\\06_test.txt").expect("File not found."));
-        let data: Vec<String> = buf.lines().map(|l| l.expect("Parse line error.")).collect();
-        let mut s = Problem::new(&data);
-
-        assert_eq!(s.p1(), 288);
-        assert_eq!(s.p2(), 71503);
-
-        println!("Total elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input\\06_test.txt")).p1(), 288);
+        println!("P1 elapsed time:    {:>10?}", start.elapsed());
+    }
+    #[test]
+    fn p2() {
+        let start = std::time::Instant::now();
+        assert_eq!(Problem::new(&load_file("input\\06_test.txt")).p2(), 71503);
+        println!("P2 elapsed time:    {:>10?}", start.elapsed());
     }
 }

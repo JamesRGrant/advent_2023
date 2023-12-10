@@ -74,15 +74,18 @@ impl Problem {
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::load_file;
 
     #[test]
-    fn run_tests() {
+    fn p1() {
         let start = std::time::Instant::now();
-        let mut s = Problem::new(&crate::load_file("input\\02_test.txt"));
-
-        assert_eq!(s.p1(), 8);
-        assert_eq!(s.p2(), 2286);
-
-        println!("Total elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input\\02_test.txt")).p1(), 8);
+        println!("P1 elapsed time:    {:>10?}", start.elapsed());
+    }
+    #[test]
+    fn p2() {
+        let start = std::time::Instant::now();
+        assert_eq!(Problem::new(&load_file("input\\02_test.txt")).p2(), 2286);
+        println!("P2 elapsed time:    {:>10?}", start.elapsed());
     }
 }

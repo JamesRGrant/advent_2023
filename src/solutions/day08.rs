@@ -19,8 +19,6 @@ impl Solve for Problem {
     fn p2(&mut self) -> i64 {
         let mut retval = 1;
 
-        // for (key, node) in &self.nodes {
-
         for node in self.graph.node_indices() {
             let key = self.graph.node_weight(node).unwrap();
             if key.chars().nth(2).unwrap() == 'A' {
@@ -125,30 +123,18 @@ impl Problem {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::fs::File;
-    use std::io::{BufRead, BufReader};
+    use crate::load_file;
 
     #[test]
-    fn run_tests() {
+    fn p1() {
         let start = std::time::Instant::now();
-        let buf = BufReader::new(File::open("input\\08_test.txt").expect("File not found."));
-        let data: Vec<String> = buf.lines().map(|l| l.expect("Parse line error.")).collect();
-        let mut s = Problem::new(&data);
-
-        assert_eq!(s.p1(), 6);
-
-        println!("Total elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input\\08_test.txt")).p1(), 6);
+        println!("P1 elapsed time:    {:>10?}", start.elapsed());
     }
-
     #[test]
-    fn test2() {
+    fn p2() {
         let start = std::time::Instant::now();
-        let buf = BufReader::new(File::open("input\\08_test2.txt").expect("File not found."));
-        let data: Vec<String> = buf.lines().map(|l| l.expect("Parse line error.")).collect();
-
-        let mut s = Problem::new(&data);
-        assert_eq!(s.p2(), 6);
-
-        println!("Total elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input\\08_test2.txt")).p2(), 6);
+        println!("P2 elapsed time:    {:>10?}", start.elapsed());
     }
 }
