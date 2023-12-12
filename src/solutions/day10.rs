@@ -1,56 +1,38 @@
 use crate::Solve;
 
+enum Dir {
+    U,
+    D,
+    L,
+    R,
+    X,
+}
+const LEFT: [char; 3] = ['┘', '┐', '─'];
+const RIGHT: [char; 3] = ['└', '┌', '─'];
+const BOTTOM: [char; 3] = ['┌', '┐', '│'];
+const TOP: [char; 3] = ['└', '┘', '│'];
+
 pub struct Problem {
     grid: Vec<Vec<char>>,
-    start_row: usize,
-    start_col: usize,
+    start_pos: (usize, usize),
     path: Vec<Vec<char>>,
 }
 impl Solve for Problem {
-    /// Short Description
+    /// Find the midpoint of the path
     fn p1(&mut self) -> i64 {
-        let mut sum = 0;
+        let sum;
 
-        // Check right
-        let tmp = self.grid[self.start_row][self.start_col + 1];
-        // println!("{tmp}");
-        if tmp == '-' || tmp == 'J' || tmp == '7' {
-            // println!("Right");
-            sum = sum.max(self.follow_path(self.start_col + 1, self.start_row));
+        if LEFT.contains(&self.grid[self.start_pos.0][self.start_pos.1 + 1]) {
+            sum = self.follow_path(self.start_pos.1 + 1, self.start_pos.0, Dir::R);
+        } else if RIGHT.contains(&self.grid[self.start_pos.0][self.start_pos.1 - 1]) {
+            sum = self.follow_path(self.start_pos.1 - 1, self.start_pos.0, Dir::L);
+        } else if BOTTOM.contains(&self.grid[self.start_pos.0 - 1][self.start_pos.1]) {
+            sum = self.follow_path(self.start_pos.1, self.start_pos.0 - 1, Dir::U);
+        } else if TOP.contains(&self.grid[self.start_pos.0 + 1][self.start_pos.1]) {
+            sum = self.follow_path(self.start_pos.1, self.start_pos.0 + 1, Dir::D);
         } else {
-            // Check left
-            let tmp = self.grid[self.start_row][self.start_col - 1];
-            // println!("{tmp}");
-            if tmp == '-' || tmp == 'L' || tmp == 'F' {
-                // println!("Left");
-                sum = sum.max(self.follow_path(self.start_col - 1, self.start_row));
-            } else {
-                // Check up
-                let tmp = self.grid[self.start_row - 1][self.start_col];
-                // println!("{tmp}");
-                if tmp == '|' || tmp == '7' || tmp == 'F' {
-                    // println!("Up");
-                    sum = sum.max(self.follow_path(self.start_col, self.start_row - 1));
-                } else {
-                    // Check down
-                    let tmp = self.grid[self.start_row + 1][self.start_col];
-                    // println!("{tmp}");
-                    if tmp == '|' || tmp == 'J' || tmp == 'L' {
-                        // println!("Down");
-                        sum = sum.max(self.follow_path(self.start_col, self.start_row + 1));
-                    }
-                }
-            }
+            panic!("No path found from start");
         }
-
-        // println!("Sum: {}", sum);
-
-        // for row in &self.path {
-        //     for c in row {
-        //         print!("{c}");
-        //     }
-        //     println!();
-        // }
 
         if sum % 2 == 0 {
             sum / 2
@@ -74,24 +56,24 @@ impl Solve for Problem {
                 if start == 0 && line[i] != ' ' {
                     start = i;
                 }
-                if line[i] == '|' {
+                if line[i] == '│' {
                     inside = !inside;
-                } else if line[i] == 'F' {
+                } else if line[i] == '┌' {
                     loop {
                         i += 1;
-                        if line[i] == 'J' {
+                        if line[i] == '┘' {
                             inside = !inside;
                             break;
-                        } else if line[i] == '7' {
+                        } else if line[i] == '┐' {
                             break;
                         }
                     }
-                } else if line[i] == 'L' {
+                } else if line[i] == '└' {
                     loop {
                         i += 1;
-                        if line[i] == 'J' {
+                        if line[i] == '┘' {
                             break;
-                        } else if line[i] == '7' {
+                        } else if line[i] == '┐' {
                             inside = !inside;
                             break;
                         }
@@ -106,59 +88,44 @@ impl Solve for Problem {
                     break;
                 }
             }
-            // for c in line.iter().skip(1).take(line.len() - 2) {
-            //     if *c == '|' {
-            //         inside = !inside;
-            //     } else if inside {
-            //         sum += 1;
-            //     }
-            // }
-            // let tmp = tmp_line
-            //     .iter()
-            //     .collect::<String>()
-            //     .replace('L', "\\")
-            //     .replace('J', "/")
-            //     .replace('7', "\\")
-            //     .replace('F', "/");
-            // println!("{tmp}  {sum}");
-        }
 
+            // Output the line with the sum
+            // println!("{}  {sum}",tmp_line.iter().collect::<String>());
+        }
         sum
     }
 }
 impl Problem {
-    pub fn check_up_down(&self, x: usize, y: usize) -> bool {
+    fn check_up_down(&self, x: usize, y: usize) -> bool {
         let mut i = y - 1;
         let mut horizontal = 0;
         while i > 0 {
-            if self.path[i][x] == '-' {
+            if self.path[i][x] == '─' {
                 horizontal += 1;
-            } else if self.path[i][x] == 'L' {
+            } else if self.path[i][x] == '└' {
                 loop {
                     i -= 1;
-                    if self.path[i][x] == '7' {
+                    if self.path[i][x] == '┐' {
                         horizontal += 1;
                         break;
-                    } else if self.path[i][x] == 'F' {
+                    } else if self.path[i][x] == '┌' {
                         break;
                     }
                 }
-            } else if self.path[i][x] == 'J' {
+            } else if self.path[i][x] == '┘' {
                 loop {
                     i -= 1;
-                    if self.path[i][x] == 'F' {
+                    if self.path[i][x] == '┌' {
                         horizontal += 1;
                         break;
-                    } else if self.path[i][x] == '7' {
+                    } else if self.path[i][x] == '┐' {
                         break;
                     }
                 }
             }
             i -= 1;
         }
-        // if y > 128 {
-        //     println!("row {y}, col {x}, up:   {horizontal}");
-        // }
+
         if horizontal == 0 {
             return false;
         }
@@ -166,115 +133,100 @@ impl Problem {
         horizontal = 0;
         i = y + 1;
         while i < self.path.len() {
-            // if y > 128 {
-            //     println!("Checking {i} {x}, {}", self.path[i][x]);
-            // }
-            if self.path[i][x] == '-' {
+            if self.path[i][x] == '─' {
                 horizontal += 1;
-            } else if self.path[i][x] == '7' {
+            } else if self.path[i][x] == '┐' {
                 loop {
                     i += 1;
-                    if self.path[i][x] == 'L' {
+                    if self.path[i][x] == '└' {
                         horizontal += 1;
                         break;
-                    } else if self.path[i][x] == 'J' {
+                    } else if self.path[i][x] == '┘' {
                         break;
                     }
                 }
-            } else if self.path[i][x] == 'F' {
+            } else if self.path[i][x] == '┌' {
                 loop {
                     i += 1;
-                    if self.path[i][x] == 'J' {
+                    if self.path[i][x] == '┘' {
                         horizontal += 1;
                         break;
-                    } else if self.path[i][x] == 'L' {
+                    } else if self.path[i][x] == '└' {
                         break;
                     }
                 }
             }
             i += 1;
         }
-        // if y > 128 {
-        //     println!("row {y}, col {x}, down: {horizontal}");
-        // }
         horizontal != 0
     }
 
-    pub fn follow_path(&mut self, x: usize, y: usize) -> i64 {
+    fn follow_path(&mut self, x: usize, y: usize, direction: Dir) -> i64 {
         let mut steps: i64 = 1;
-        let mut walk_x = x;
-        let mut walk_y = y;
-        let mut cur = self.grid[y][x];
-        let mut last_x = self.start_col;
-        let mut last_y = self.start_row;
+        let mut last = self.start_pos;
+        let mut walk = (y, x);
 
-        // println!("Start: {cur} @ {walk_y}, {walk_x}");
-        // println!("{}, {}", self.start_row, self.start_col);
-        self.path[last_y][last_x] = 'S';
+        while walk != self.start_pos {
+            let cur = self.grid[walk.0][walk.1];
+            self.path[walk.0][walk.1] = cur;
+            let this_step = walk;
+            let mut last_dir = Dir::X;
 
-        while !(walk_x == self.start_col && walk_y == self.start_row) {
-            self.path[walk_y][walk_x] = cur;
-            let tmp_x = walk_x;
-            let tmp_y = walk_y;
-            // print!("{cur}");
-            // let old = cur;
             // Right
-            if last_x != walk_x + 1 && (cur == '-' || cur == 'L' || cur == 'F') {
-                let new = self.grid[walk_y][walk_x + 1];
-                // println!("  Right: {new}");
-                if new == '-' || new == 'J' || new == '7' || new == 'S' {
-                    walk_x += 1;
-                    cur = new;
+            let test = (walk.0, walk.1 + 1);
+            if last != test && RIGHT.contains(&cur) {
+                let new = self.grid[test.0][test.1];
+                if LEFT.contains(&new) || new == 'S' {
+                    walk = test;
+                    last_dir = Dir::R;
                 }
             }
             // Left
-            if last_x != walk_x - 1
-                && (walk_x == tmp_x && walk_y == tmp_y)
-                && (cur == '-' || cur == 'J' || cur == '7')
-            {
-                let new = self.grid[walk_y][walk_x - 1];
-                // println!("  Left: {new}");
-                if new == '-' || new == 'L' || new == 'F' || new == 'S' {
-                    walk_x -= 1;
-                    cur = new;
+            let test = (walk.0, walk.1 - 1);
+            if last != test && (walk == this_step) && LEFT.contains(&cur) {
+                let new = self.grid[test.0][test.1];
+                if RIGHT.contains(&new) || new == 'S' {
+                    walk = test;
+                    last_dir = Dir::L;
                 }
             }
             // Up
-            if last_y != walk_y - 1
-                && (walk_x == tmp_x && walk_y == tmp_y)
-                && (cur == '|' || cur == 'J' || cur == 'L')
-            {
-                let new = self.grid[walk_y - 1][walk_x];
-                // println!("  Up: {new}");
-                if new == '|' || new == '7' || new == 'F' || new == 'S' {
-                    walk_y -= 1;
-                    cur = new;
+            let test = (walk.0 - 1, walk.1);
+            if last != test && (walk == this_step) && TOP.contains(&cur) {
+                let new = self.grid[test.0][test.1];
+                if BOTTOM.contains(&new) || new == 'S' {
+                    walk = test;
+                    last_dir = Dir::U;
                 }
             }
             // Down
-            if last_y != walk_y + 1
-                && (walk_x == tmp_x && walk_y == tmp_y)
-                && (cur == '|' || cur == '7' || cur == 'F')
-            {
-                let new = self.grid[walk_y + 1][walk_x];
-                // println!("  Down: {new}");
-                if new == '|' || new == 'J' || new == 'L' || new == 'S' {
-                    walk_y += 1;
-                    cur = new;
+            let test = (walk.0 + 1, walk.1);
+            if last != test && (walk == this_step) && BOTTOM.contains(&cur) {
+                let new = self.grid[test.0][test.1];
+                if TOP.contains(&new) || new == 'S' {
+                    walk = test;
+                    last_dir = Dir::D;
                 }
             }
 
             // If we did not move, this path is dead
-            if walk_x == tmp_x && walk_y == tmp_y {
-                // println!("\n cur == old @ {walk_y}, {walk_x}");
-                return 0;
-            }
-            if walk_x == self.start_col && walk_y == self.start_row {
-                // println!("\n start");
+            assert!(walk != this_step, "Followed dead path");
+
+            if walk == self.start_pos {
+                // Replace the S with the correct symbol
+                self.path[walk.0][walk.1] = match (last_dir, direction) {
+                    (Dir::R, Dir::R) | (Dir::L, Dir::L) => '─',
+                    (Dir::U, Dir::U) | (Dir::D, Dir::D) => '│',
+                    (Dir::R, Dir::U) | (Dir::D, Dir::L) => '┘',
+                    (Dir::R, Dir::D) | (Dir::U, Dir::L) => '┐',
+                    (Dir::L, Dir::U) | (Dir::D, Dir::R) => '└',
+                    (Dir::L, Dir::D) | (Dir::U, Dir::R) => '┌',
+                    (_, _) => panic!("Invalid direction"),
+                };
+
                 return steps;
             }
-            last_x = tmp_x;
-            last_y = tmp_y;
+            last = this_step;
             steps += 1;
         }
         0
@@ -282,42 +234,41 @@ impl Problem {
 
     pub fn new(data: &[String]) -> Self {
         let mut grid: Vec<Vec<char>> = Vec::new();
-        let mut start_row: usize = 0;
-        let mut start_col: usize = 0;
+        let mut start_pos: (usize, usize) = (0, 0);
 
         // 1 space padding around the grid to make out of bounds easier to handle
-        let mut g: Vec<char> = vec![' '; data[0].len() + 2];
-        grid.push(g);
+        let blank_line: Vec<char> = vec![' '; data[0].len() + 2];
+        grid.push(blank_line.clone());
         for (i, line) in data.iter().enumerate() {
-            g = vec![' '];
-            g.append(&mut line.chars().collect::<Vec<char>>());
-            g.push(' ');
-
-            grid.push(g);
-            if start_row == 0 {
-                if let Some(f) = line.find('S') {
-                    start_row = i + 1;
-                    start_col = f + 1;
-                }
+            // Replace letters with cleaner symbols ┌┘└┐─│
+            let mut g: Vec<char> = vec![' '];
+            for (j, c) in line.chars().enumerate() {
+                g.push(match c {
+                    'F' => '┌',
+                    'J' => '┘',
+                    '7' => '┐',
+                    'L' => '└',
+                    '-' => '─',
+                    '|' => '│',
+                    'S' => {
+                        start_pos = (i + 1, j + 1);
+                        'S'
+                    }
+                    _ => c,
+                });
             }
+            g.push(' ');
+            grid.push(g);
         }
-        let g: Vec<char> = vec![' '; data[0].len() + 2];
-        grid.push(g);
+        grid.push(blank_line);
 
-        // for row in &grid {
-        //     for c in row {
-        //         print!("{}", c);
-        //     }
-        //     println!();
-        // }
-        // println!("Start: {}, {}", start_row, start_col);
+        // Create a blank grid that will used to store the actual path
         let cols = grid[0].len();
         let rows = grid.len();
 
         Problem {
             grid,
-            start_row,
-            start_col,
+            start_pos,
             path: vec![vec![' '; cols]; rows],
         }
     }
@@ -341,7 +292,6 @@ mod test {
         let mut s = Problem::new(&load_file("input\\10_test1.txt"));
         s.p1(); // setup the grid in p1
         assert_eq!(s.p2(), 4);
-
         println!("Total elapsed time:    {:>10?}", start.elapsed());
     }
 
@@ -351,7 +301,6 @@ mod test {
         let mut s = Problem::new(&load_file("input\\10_test2.txt"));
         s.p1(); // setup the grid in p1
         assert_eq!(s.p2(), 8);
-
         println!("Total elapsed time:    {:>10?}", start.elapsed());
     }
     #[test]
@@ -360,7 +309,6 @@ mod test {
         let mut s = Problem::new(&load_file("input\\10_test3.txt"));
         s.p1(); // setup the grid in p1
         assert_eq!(s.p2(), 10);
-
         println!("Total elapsed time:    {:>10?}", start.elapsed());
     }
 }
